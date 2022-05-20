@@ -132,7 +132,7 @@ class _MyAppState extends State<MyApp> {
       case Share.share_snapchat:
         response = await flutterShareMe.shareToSnapchat(
             file: file!.path,
-            appSignature: 'zhuoyuan.li.flutter_share_me_example');
+            appSignature: 'YOUR PACKAGE NAME');
         break;
       case Share.twitter:
         response = await flutterShareMe.shareToTwitter(url: url, msg: msg);
