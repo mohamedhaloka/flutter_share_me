@@ -124,10 +124,15 @@ class _MyAppState extends State<MyApp> {
         response = await flutterShareMe.shareToFacebook(
             url: url,
             msg: msg,
-            clientToken: '8f9d81126617c469a5ed60a45ab97692');
+            clientToken: 'YOUR CLIENT TOKEN');
         break;
       case Share.messenger:
         response = await flutterShareMe.shareToMessenger(url: url, msg: msg);
+        break;
+      case Share.share_snapchat:
+        response = await flutterShareMe.shareToSnapchat(
+            file: file!.path,
+            appSignature: 'zhuoyuan.li.flutter_share_me_example');
         break;
       case Share.twitter:
         response = await flutterShareMe.shareToTwitter(url: url, msg: msg);
@@ -159,11 +164,7 @@ class _MyAppState extends State<MyApp> {
       case Share.share_telegram:
         response = await flutterShareMe.shareToTelegram(msg: msg);
         break;
-      case Share.share_snapchat:
-        response = await flutterShareMe.shareToSnapchat(
-            file: file!.path,
-            appSignature: 'zhuoyuan.li.flutter_share_me_example');
-        break;
+
     }
     debugPrint(response);
   }
