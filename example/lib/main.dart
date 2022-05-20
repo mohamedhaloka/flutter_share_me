@@ -14,7 +14,8 @@ enum Share {
   whatsapp_business,
   share_system,
   share_instagram,
-  share_telegram
+  share_telegram,
+  share_snapchat
 }
 
 void main() => runApp(MyApp());
@@ -75,6 +76,10 @@ class _MyAppState extends State<MyApp> {
                 child: const Text('share to Telegram'),
               ),
               ElevatedButton(
+                onPressed: () => onButtonTap(Share.share_snapchat),
+                child: const Text('share to Snapchat'),
+              ),
+              ElevatedButton(
                 onPressed: () => onButtonTap(Share.share_system),
                 child: const Text('share to System'),
               ),
@@ -116,7 +121,10 @@ class _MyAppState extends State<MyApp> {
     final FlutterShareMe flutterShareMe = FlutterShareMe();
     switch (share) {
       case Share.facebook:
-        response = await flutterShareMe.shareToFacebook(url: url, msg: msg);
+        response = await flutterShareMe.shareToFacebook(
+            url: url,
+            msg: msg,
+            clientToken: '8f9d81126617c469a5ed60a45ab97692');
         break;
       case Share.messenger:
         response = await flutterShareMe.shareToMessenger(url: url, msg: msg);
@@ -150,6 +158,11 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.share_telegram:
         response = await flutterShareMe.shareToTelegram(msg: msg);
+        break;
+      case Share.share_snapchat:
+        response = await flutterShareMe.shareToSnapchat(
+            file: file!.path,
+            appSignature: 'zhuoyuan.li.flutter_share_me_example');
         break;
     }
     debugPrint(response);

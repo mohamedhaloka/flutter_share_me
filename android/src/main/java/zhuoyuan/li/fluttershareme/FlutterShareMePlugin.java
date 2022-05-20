@@ -15,6 +15,9 @@ import androidx.core.content.FileProvider;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.LoggingBehavior;
+import com.facebook.share.BuildConfig;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.MessageDialog;
@@ -51,6 +54,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     final private static String _methodSystemShare = "system_share";
     final private static String _methodInstagramShare = "instagram_share";
     final private static String _methodTelegramShare = "telegram_share";
+    final private static String _methodSnapchatShare = "snapchat_share";
 
 
     private Activity activity;
@@ -97,12 +101,14 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             case _methodFaceBook:
                 url = call.argument("url");
                 msg = call.argument("msg");
+                String clientToken = call.argument("clientToken");
+                initFacebookService(clientToken);
                 shareToFacebook(url, msg, result);
                 break;
             case _methodMessenger:
                 url = call.argument("url");
                 msg = call.argument("msg");
-                shareToMessenger(url, msg, result);
+                shareToMessenger(msg, result);
                 break;
             case _methodTwitter:
                 url = call.argument("url");
@@ -137,9 +143,25 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 msg = call.argument("msg");
                 shareToTelegram(msg, result);
                 break;
+            case _methodSnapchatShare:
+                String file = call.argument("file");
+                String appSignature = call.argument("appSignature");
+                openSnapChatShareDialog(file, appSignature,result);
+                break;
             default:
                 result.notImplemented();
                 break;
+        }
+    }
+    
+    
+    private void initFacebookService(String clientToken){
+//        String CLIENT_TOKEN = "8f9d81126617c469a5ed60a45ab97692";
+        FacebookSdk.setClientToken(clientToken);
+        FacebookSdk.sdkInitialize(activity.getApplicationContext());
+        if (BuildConfig.DEBUG) {
+            FacebookSdk.setIsDebugEnabled(true);
+            FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
         }
     }
 
@@ -194,6 +216,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     private void shareToFacebook(String url, String msg, Result result) {
 
         ShareDialog shareDialog = new ShareDialog(activity);
+//        ShareDialog shareDialog = new ShareDialog(activity);
         // this part is optional
         shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
             @Override
@@ -230,34 +253,41 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
      * @param msg    String
      * @param result Result
      */
-    private void shareToMessenger(String url, String msg, Result result) {
-        ShareLinkContent content = new ShareLinkContent.Builder()
-                .setContentUrl(Uri.parse(url))
-                .setQuote(msg)
-                .build();
-        MessageDialog shareDialog = new MessageDialog(activity);
-        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
-            @Override
-            public void onSuccess(Sharer.Result result) {
-                System.out.println("--------------------success");
-            }
-
-            @Override
-            public void onCancel() {
-                System.out.println("-----------------onCancel");
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                System.out.println("---------------onError");
-            }
-        });
-
-        if (shareDialog.canShow(content)) {
-            shareDialog.show(content);
+    private void shareToMessenger( String msg, Result result) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent
+                .putExtra(Intent.EXTRA_TEXT, msg);
+        sendIntent.setType("text/plain");
+        sendIntent.setPackage("com.facebook.orca");
+        try {
+            activity.startActivity(sendIntent);
             result.success("success");
         }
-        result.error("error", "Cannot share thought messenger", "");
+        catch (android.content.ActivityNotFoundException ex) {
+            result.error("error", "Cannot share thought messenger", "");
+        }
+    }
+//com.aymax.qatiftoday
+    private void openSnapChatShareDialog(String filePath,String appSignature,Result result) {
+
+        try {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("image/jpeg");
+            intent.setPackage("com.snapchat.android");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri photoUri = FileProvider.getUriForFile(
+                    activity,
+                    appSignature+".provider",
+                    new File(filePath)
+            );
+            intent.putExtra(Intent.EXTRA_STREAM, photoUri);
+            activity.startActivity(Intent.createChooser(intent, "Share SnapChat"));
+            result.success("success");
+        } catch (Exception var9) {
+            result.error("error", var9.toString(), "");
+        }
     }
 
     /**

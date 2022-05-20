@@ -1,14 +1,13 @@
 # flutter_share_me
 
-[![pub package](https://img.shields.io/pub/v/flutter_share_me.svg)](https://pub.dartlang.org/packages/flutter_share_me)
-[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
-
 Flutter Plugin for sharing contents to social media.
 
-You can use it share to Facebook , Instagram , WhatsApp(WhatsAppBusiness) , Twitter, telegram And System Share UI. 
+You can use it share to Facebook , Messenger , Instagram , WhatsApp(WhatsAppBusiness) , Twitter, telegram ,snapchat And System Share UI.
 Support Url and Text.
 
 support:
+ - Android Only :  Messenger, Snapchat
+
  - Android & iOS :  Facebook,WhatsApp(WhatsAppBusiness),Twitter,Instagram,System Share
 
 **Note: This plugin is still under development, and some APIs might not be available yet.  
@@ -16,34 +15,33 @@ Feedback and Pull Requests are most welcome!**
 
 ## Getting Started
 
-add `flutter_share_me` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
+Download this repo and use it as local dependencies
+in pubspec.yaml in your project
+```
+flutter_share_me:
+    path: path of this package
+```
 
-Please check the latest version before installation.
-```
-dependencies:
-  flutter:
-    sdk: flutter
-  # add flutter_share_me
-  flutter_share_me: ^0.11.0
-```
 ## Setup 
 
 #### Android
 
 Add "facebook app id" to the application tag of AndroidManifest.xml
 ```
+<manifest xmlns:android="http://sche...
+
+    <queries>
+            <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
+    </queries>
+
     <application>
        ...
        //add this 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-            
-        <provider
-            android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider[facebook_app_id]"
-            android:exported="false" />
     </application>
+</manifest>
 ```
 
 string.xml:
@@ -60,8 +58,7 @@ string.xml:
     
 ##### setup facebook
 
-make sure you add below deatils in your plist file.
-
+make sure you add below details in your plist file.
 
 ```
 <key>FacebookAppID</key>
@@ -114,7 +111,7 @@ Make sure you add whatsapp in plist.
         </array>
 ````
 
-#### Setup Twiter
+#### Setup Twitter
 
 ````<key>LSApplicationQueriesSchemes</key>
         <array>
@@ -130,17 +127,22 @@ Make sure you add whatsapp in plist.
 import 'package:flutter_share_me/flutter_share_me.dart';
 ```
 
-
 ## Methods
 
 ### facebook
-#### shareToFacebook({String msg, String url})   
+#### shareToFacebook({String msg, String url,String clientToken})
+
+- How i can get Client Token
+go to Meta for Developer and create app > Setting > Advanced > Security Section > Copy Client Token
+
+### messenger
+#### shareToMessenger({String msg, String url})
 
 ### twitter
 #### shareToTwitter({String msg, String url})   
 
 ### whatsapp
-#### shareToWhatsApp({String msg,String imagePath})  
+#### shareToWhatsApp({String msg,String imagePath})
 #### shareToWhatsApp4Biz({String msg,String imagePath})  (only android)
 #### shareWhatsAppPersonalMessage(String message ,String phoneNumber)
 
@@ -149,6 +151,12 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 
 ### telegram
 #### shareToTelegram({String msg})
+
+### snapchat
+#### shareToSnapchat({String file,String appSignature})
+
+- What is app signature
+app signature is a package name in android or bundle id iOS .. put your package name of your app
 
 ### system
 #### shareToSystem({String msg})   use system share ui
@@ -160,6 +168,7 @@ These methods will return "success" if they successfully jump to the correspondi
 | String msg  | Text message  |
 | String url  | Url url  |
 | String imagePath  |The local path of the image   |
+| String file  |The local path of the file   |
 
 ## Example
 ```
@@ -170,8 +179,16 @@ These methods will return "success" if they successfully jump to the correspondi
             children: <Widget>[
               SizedBox(height: 30),
               ElevatedButton(
-                  onPressed: () => onButtonTap(Share.twitter),
-                  child: Text('share to twitter')),
+                onPressed: () => onButtonTap(Share.facebook),
+                child: Text('share to FaceBook'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.messenger),
+                child: Text('share to Messenger'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.twitter),
+                child: Text('share to Twitter')),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.whatsapp),
                 child: Text('share to WhatsApp'),
@@ -181,8 +198,12 @@ These methods will return "success" if they successfully jump to the correspondi
                 child: Text('share to WhatsApp  Business'),
               ),
               ElevatedButton(
-                onPressed: () => onButtonTap(Share.facebook),
-                child: Text('share to  FaceBook'),
+                onPressed: () => onButtonTap(Share.whatsapp_personal),
+                child: Text('share to WhatsApp  Personal'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.share_snapchat),
+                child: Text('share to Snapchat'),
               ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.share_system),
@@ -192,8 +213,4 @@ These methods will return "success" if they successfully jump to the correspondi
           ),
         )
 ```
-
-
-### Checkout the full example [here](https://github.com/OpenFlutter/flutter_share_me/blob/master/example/lib/main.dart) 
-
 

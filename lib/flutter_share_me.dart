@@ -17,6 +17,7 @@ class FlutterShareMe {
   static const String _methodInstagramShare = 'instagram_share';
   static const String _methodSystemShare = 'system_share';
   static const String _methodTelegramShare = 'telegram_share';
+  static const String _methodSnapchatShare = 'snapchat_share';
 
   ///share to WhatsApp
   /// [imagePath] is local image
@@ -66,6 +67,26 @@ class FlutterShareMe {
     return result;
   }
 
+  ///share to snapchat
+  /// [file] path of the file
+  /// [appSignature] package name of the app
+  Future<String?> shareToSnapchat(
+      {required String file, required String appSignature}) async {
+    final Map<String, dynamic> arguments = <String, dynamic>{};
+    arguments.putIfAbsent('file', () => file);
+    arguments.putIfAbsent('appSignature', () => appSignature);
+
+    String? result;
+    try {
+      result =
+          await _channel.invokeMethod<String>(_methodSnapchatShare, arguments);
+    } catch (e) {
+      return e.toString();
+    }
+
+    return result;
+  }
+
   ///share to Telegram
   /// [msg] message text you want on telegram
   Future<String?> shareToTelegram({required String msg}) async {
@@ -104,10 +125,11 @@ class FlutterShareMe {
 
   ///share to facebook
   Future<String?> shareToFacebook(
-      {required String msg, String url = ''}) async {
+      {required String msg,required String clientToken, String url = ''}) async {
     final Map<String, dynamic> arguments = <String, dynamic>{};
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => url);
+    arguments.putIfAbsent('clientToken', () => clientToken);
     String? result;
     try {
       result = await _channel.invokeMethod<String?>(_methodFaceBook, arguments);
@@ -118,19 +140,20 @@ class FlutterShareMe {
   }
 
   ///share to messenger
-  Future<String?> shareToMessenger({required String msg, String url = ''}) async {
+  Future<String?> shareToMessenger(
+      {required String msg, String url = ''}) async {
     final Map<String, dynamic> arguments = <String, dynamic>{};
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => url);
     String? result;
     try {
-      result = await _channel.invokeMethod<String?>(_methodMessenger, arguments);
+      result =
+          await _channel.invokeMethod<String?>(_methodMessenger, arguments);
     } catch (e) {
       return e.toString();
     }
     return result;
   }
-
 
   ///share to twitter
   ///[msg] string that you want share.
