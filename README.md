@@ -132,7 +132,7 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 ### facebook
 #### shareToFacebook({String msg, String url,String clientToken})
 
-- How i can get Client Token
+- How i can get Client Token? ..
 go to Meta for Developer and create app > Setting > Advanced > Security Section > Copy Client Token
 
 ### messenger
@@ -155,7 +155,7 @@ go to Meta for Developer and create app > Setting > Advanced > Security Section 
 ### snapchat
 #### shareToSnapchat({String file,String appSignature})
 
-- What is app signature
+- What is app signature? ..
 app signature is a package name in android or bundle id iOS .. put your package name of your app
 
 ### system
