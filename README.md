@@ -6,9 +6,9 @@ You can use it share to Facebook , Messenger , Instagram , WhatsApp(WhatsAppBusi
 Support Url and Text.
 
 support:
- - Android Only :  Messenger, Snapchat
+ - Android Only :  Messenger
 
- - Android & iOS :  Facebook,WhatsApp(WhatsAppBusiness),Twitter,Instagram,System Share
+ - Android & iOS :  Facebook,WhatsApp(WhatsAppBusiness,Personal),Twitter,Instagram,Snapchat,System Share
 
 **Note: This plugin is still under development, and some APIs might not be available yet.  
 Feedback and Pull Requests are most welcome!**
