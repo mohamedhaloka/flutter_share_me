@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 ///sharing platform
 enum Share {
@@ -135,7 +136,7 @@ class _MyAppState extends State<MyApp> {
             appSignature: 'YOUR PACKAGE NAME');
         break;
       case Share.twitter:
-        response = await flutterShareMe.shareToTwitter(url: url, msg: msg);
+        await _shareToTwitter(msg);
         break;
       case Share.whatsapp:
         if (file != null) {
@@ -167,5 +168,21 @@ class _MyAppState extends State<MyApp> {
 
     }
     debugPrint(response);
+  }
+
+
+  Future<void> _shareToTwitter(String msg) async {
+    String urlString = '';
+    if (Platform.isAndroid) {
+      urlString =
+          Uri.encodeFull('http://www.twitter.com/intent/tweet?text=$msg');
+    } else {
+      urlString = Uri.encodeFull('twitter://post?message=$msg');
+    }
+    await _launchIntentUrl(urlString);
+  }
+
+  Future<void> _launchIntentUrl(String urlString) async {
+    if (await canLaunch(urlString)) await launch(urlString);
   }
 }

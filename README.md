@@ -2,7 +2,7 @@
 
 Flutter Plugin for sharing contents to social media.
 
-You can use it share to Facebook , Messenger , Instagram , WhatsApp(WhatsAppBusiness) , Twitter, telegram ,snapchat And System Share UI.
+You can use it share to Facebook , Messenger , Instagram , WhatsApp(WhatsAppBusiness) , Twitter, Telegram , Snapchat And System Share UI.
 Support Url and Text.
 
 support:
@@ -171,7 +171,7 @@ These methods will return "success" if they successfully jump to the correspondi
 | String file  |The local path of the file   |
 
 ## Example
-```
+```dart
  Container(
           width: double.infinity,
           child: Column(
