@@ -27,7 +27,7 @@ flutter_share_me:
 #### Android
 
 Add "facebook app id" to the application tag of AndroidManifest.xml
-```
+```xml
 <manifest xmlns:android="http://sche...
 
     <queries>
@@ -45,7 +45,7 @@ Add "facebook app id" to the application tag of AndroidManifest.xml
 ```
 
 string.xml:
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <!-- Replace "343254889799245" with your Facebook App ID here. -->
@@ -60,7 +60,7 @@ string.xml:
 
 make sure you add below details in your plist file.
 
-```
+```xml
 <key>FacebookAppID</key>
 <string>fbid</string>
 <key>CFBundleURLTypes</key>
@@ -79,7 +79,8 @@ Note-: Make sure you add fb in  at start of your fb Id in CFBundleURLSchemes.
 Add below value in url scheme(Refer to example).
 
 
-```<key>LSApplicationQueriesSchemes</key>
+```xml
+<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbauth2</string>
 		<string>fbapi</string>
@@ -105,7 +106,8 @@ Add below value in url scheme(Refer to example).
 
 Make sure you add whatsapp in plist.
 
-````<key>LSApplicationQueriesSchemes</key>
+````xml
+<key>LSApplicationQueriesSchemes</key>
         <array>
             <string>whatsapp</string>
         </array>
@@ -113,17 +115,18 @@ Make sure you add whatsapp in plist.
 
 #### Setup Twitter
 
-````<key>LSApplicationQueriesSchemes</key>
+```xml
+    <key>LSApplicationQueriesSchemes</key>
         <array>
             <string>twitter</string>
         </array>
-````
+```
 
 ## Usage
 
 #### Add the following imports to your Dart code:
 
-```
+```dart
 import 'package:flutter_share_me/flutter_share_me.dart';
 ```
 
