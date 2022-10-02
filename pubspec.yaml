@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   lint: ^1.6.0
+  #this packagr for make calls
+  url_launcher: ^6.0.18
 
 dev_dependencies:
   flutter_test:

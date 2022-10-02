@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'file_type.dart';
 
@@ -125,7 +129,9 @@ class FlutterShareMe {
 
   ///share to facebook
   Future<String?> shareToFacebook(
-      {required String msg,required String clientToken, String url = ''}) async {
+      {required String msg,
+      required String clientToken,
+      String url = ''}) async {
     final Map<String, dynamic> arguments = <String, dynamic>{};
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => url);
@@ -157,17 +163,20 @@ class FlutterShareMe {
 
   ///share to twitter
   ///[msg] string that you want share.
-  Future<String?> shareToTwitter({required String msg, String url = ''}) async {
-    final Map<String, dynamic> arguments = <String, dynamic>{};
-    arguments.putIfAbsent('msg', () => msg);
-    arguments.putIfAbsent('url', () => url);
-    String? result;
-    try {
-      result = await _channel.invokeMethod(_methodTwitter, arguments);
-    } catch (e) {
-      return e.toString();
+  Future<void> shareToTwitter({required String msg}) async {
+    String urlString = '';
+    if (Platform.isAndroid) {
+      urlString =
+          Uri.encodeFull('http://www.twitter.com/intent/tweet?text=$msg');
+    } else {
+      urlString = Uri.encodeFull('twitter://post?message=$msg');
     }
-    return result;
+    if (await canLaunchUrlString(urlString)) {
+      await launchUrlString(
+        urlString,
+        mode: LaunchMode.externalApplication,
+      );
+    }
   }
 
   ///use system share ui
